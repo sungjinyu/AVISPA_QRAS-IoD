@@ -102,12 +102,6 @@ avispa QRAS-IoD.hlpsl --ofmc
 avispa QRAS-IoD.hlpsl --cl-atse
 ```
 
-### 5. Compare with the provided results
-
-The outputs obtained by the authors are stored in `result/OFMC` and `result/CL-AtSe`.
-
----
-
 ## HLPSL Model
 
 ### Roles
@@ -163,8 +157,7 @@ Each goal is expressed with a `witness`/`request` pair and checked as strong aut
 
 ## Results
 
-The complete outputs are available in the `result/` folder.
-
+The complete outputs are available in the `result/OFMC` and `result/CL-AtSe`.
 
 ## Citation
 
