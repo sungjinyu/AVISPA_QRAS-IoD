@@ -6,7 +6,7 @@ DETAILS
   TYPED_MODEL
 
 PROTOCOL
-  /home/span/span/testsuite/results/QRAS-IoD.if
+  /home/span/span/test_suite/results/QRAS-IoD.if
 
 GOAL
   As_specified
