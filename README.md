@@ -183,5 +183,4 @@ If you use this repository, please cite the paper:
 
 ## References
 
-- AVISPA project: <http://www.avispa-project.org/>
 - SPAN, the Security Protocol ANimator for AVISPA: <https://people.irisa.fr/Thomas.Genet/span/>
