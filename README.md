@@ -1,6 +1,6 @@
 # AVISPA_QRAS-IoD
 
-Formal security verification of **QRAS-IoD** with AVISPA and SPAN.
+Formal security verification of **QRAS-IoD** with AVISPA.
 
 This repository contains the HLPSL specification and the verification results used in the security analysis of the paper:
 
