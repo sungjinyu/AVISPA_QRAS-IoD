@@ -7,7 +7,7 @@ This repository contains the HLPSL specification and the verification results us
 > **Quantum-safe and Robust Authentication and Key Agreement Scheme for PUF-enabled Internet of Drones**
 > (Joonyoung Lee, Sungjin Yu, and Kisung Park)
 
-The model checks whether a Dolev–Yao intruder who fully controls the public channel can break the secrecy of the session key and credentials, or the mutual authentication among the mobile user, the ground station server, and the drone.
+The AVISPA model checks whether a Dolev–Yao intruder who fully controls the public channel can break the secrecy of the session key and credentials, or the mutual authentication among the mobile user, the ground station server, and the drone.
 
 ---
 
