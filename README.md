@@ -122,21 +122,6 @@ The outputs obtained by the authors are stored in `result/OFMC` and `result/CL-A
 
 The `goal` section at the end of the file declares the secrecy and authentication properties to be verified.
 
-### Modelling abstractions
-
-AVISPA works on a symbolic model, so the cryptographic primitives of QRAS-IoD are abstracted as follows.
-
-| Protocol element | HLPSL representation |
-|---|---|
-| ML-KEM encapsulation `(ct1, K1) ← Encaps(pkGSS)` | Fresh `K1` encrypted under the public key: `{K1}_PKG` |
-| ML-KEM decapsulation `Decaps(skGSS, ct1)` | Decryption with the private key `inv(PKG)` |
-| GSS long-term secret `skGSS` | `inv(PKG)` |
-| One-way hash `h(·)` | `H : hash_func` |
-| `PUF(·)` | `PUF : hash_func`, **not** included in the intruder knowledge (unclonability) |
-| XOR-masked values `A ⊕ h(B)` | Dedicated one-way functions `Mask1`–`Mask5`, `UserMaskB`, `UserMaskD1`, `UserMaskD2`, `DroneMaskF`, `DroneMaskG` applied to `A.B` |
-| Secure registration channels | Symmetric keys `KUG` (`MUi`–`GSS`) and `KDG` (`Dj`–`GSS`) unknown to the intruder |
-| Timestamps `T1`–`T4`, nonces `N1`–`N3`, `TIDi` | Fresh values generated with `new()` |
-
 ### Notation mapping
 
 | Paper | HLPSL | Paper | HLPSL |
