@@ -3,7 +3,8 @@ SUMMARY
 
 DETAILS
   BOUNDED_NUMBER_OF_SESSIONS
- TYPED_MODEL 
+  TYPED_MODEL 
+
 PROTOCOL
   /home/span/span/test_suite/results/QRAS-IoD.if
 
