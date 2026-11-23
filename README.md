@@ -122,14 +122,6 @@ The outputs obtained by the authors are stored in `result/OFMC` and `result/CL-A
 
 The `goal` section at the end of the file declares the secrecy and authentication properties to be verified.
 
-### Notation mapping
-
-| Paper | HLPSL | Paper | HLPSL |
-|---|---|---|---|
-| `IDi`, `PWi` | `IDU`, `PW` | `IDDj`, `DKj` | `IDD`, `DKJ` |
-| `RPWi`, `PIDi`, `Xi` | `RPW`, `PIDU`, `XI` | `PIDDj` | `PIDD` |
-| `Bi`, `Ci`, `D1`, `D2` | `BI`, `CI`, `D1`, `D2` | `rj`, `Cj`, `Rj` | `RNJ`, `CJ`, `RJ` |
-| `ct1`, `K1` | `CT1`, `K1` | `Fj`, `Gj` | `FJ`, `GJ` |
 
 ### Intruder model
 
