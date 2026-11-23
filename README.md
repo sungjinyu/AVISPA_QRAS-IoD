@@ -163,26 +163,8 @@ Each goal is expressed with a `witness`/`request` pair and checked as strong aut
 
 ## Results
 
-<!-- TODO: fill in from result/OFMC and result/CL-AtSe after running the analysis -->
-
-| Back-end | Summary | Statistics |
-|---|---|---|
-| OFMC | `TODO` | `TODO` (search time, visited nodes, depth) |
-| CL-AtSe | `TODO` | `TODO` (analysed states, reachable states, computation time) |
-
 The complete outputs are available in the `result/` folder.
 
----
-
-## Scope and Limitations
-
-- **Bounded analysis.** OFMC and CL-AtSe verify the goals for a bounded number of sessions; the result holds for the scenario defined in the `environment` role.
-- **Symbolic model.** Cryptographic primitives are assumed to be perfect. Computational hardness (e.g., Module-LWE) and quantum adversaries are outside the scope of AVISPA and are addressed by the other analyses in the paper.
-- **XOR abstraction.** Masked values are modelled with one-way functions, so algebraic properties of XOR are not explored by the back-ends.
-- **Timestamps.** Freshness is modelled with fresh values; the inequality check `|Ti+1 − Ti| ≤ ΔT` is not represented.
-- **PUF.** The PUF is treated as an ideal, noise-free function that only legitimate parties can evaluate.
-
----
 
 ## Citation
 
@@ -190,9 +172,9 @@ If you use this repository, please cite the paper:
 
 ```bibtex
 @unpublished{lee_qras_iod,
-  author = {Lee, Joonyoung and Yu, Sungjin and Park, Kisung},
+  author = {Joonyoung Lee, Kisung Park, and Sungjin Yu},
   title  = {Quantum-safe and Robust Authentication and Key Agreement Scheme for PUF-enabled Internet of Drones},
-  note   = {Manuscript under review},
+  note   = {Manuscript},
   year   = {2026}
 }
 ```
