@@ -16,7 +16,7 @@ You can reproduce our experiments by following the steps below:
    * Open **VirtualBox**, import the downloaded SPAN+AVISPA disk image, and start the virtual machine.
 
 3. **Run the Simulation**
-   * Copy the `simulation.hlpsl` file from the provided `code/` folder into SPAN.
+   * Copy the `QRAS-IoD.hlpsl` file from the provided `code/` folder into SPAN.
    * Execute the simulation and check the results from the **CL-AtSe** and **OFMC** backends.
    * The HLPSL code consists of the following main components:
      * **Role** – Defines the behavior of each participant (e.g., initiator, responder, or server) and specifies message exchanges, cryptographic operations, and state transitions.
