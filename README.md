@@ -164,7 +164,7 @@ The complete outputs are available in the `result/OFMC` and `result/CL-AtSe`.
 If you use this repository, please cite the paper:
 
 ```bibtex
-@unpublished{lee_qras_iod,
+@unpublished{qras_iod,
   author = {Joonyoung Lee, Kisung Park, and Sungjin Yu},
   title  = {Quantum-safe and Robust Authentication and Key Agreement Scheme for PUF-enabled Internet of Drones},
   note   = {Manuscript},
