@@ -1,1 +1,286 @@
+role mobile_user(
+    U, G, D                  : agent,
+    KUG                      : symmetric_key,
+    PKG                      : public_key,
+    IDU, PW                  : message,
+    H, Mask1, Mask2, Mask5,
+    UserMaskB, UserMaskD1,
+    UserMaskD2               : hash_func,
+    Snd, Rcv                 : channel(dy))
+played_by U
+def=
 
+  local
+    State                    : nat,
+    RPW, PIDU, IDD, XI       : message,
+    BI, CI, D1, D2           : message,
+    N1, N2, N3               : message,
+    TID, T1, T3, T4          : message,
+    K1, CT1                  : message,
+    M1, M2, M5               : message,
+    V1, V4, V5, SK           : message
+
+  init
+    State := 0
+
+  transition
+
+  1. State = 0 /\ Rcv(start) =|>
+     State' := 1
+     /\ RPW' := H(PW.IDU)
+     /\ Snd({IDU.RPW'}_KUG)
+
+  2. State = 1
+     /\ Rcv({PIDU'.IDD'.UserMaskB(XI'.RPW).CI'}_KUG) =|>
+     State' := 2
+     /\ BI' := UserMaskB(XI'.RPW)
+     /\ D1' := UserMaskD1(BI'.IDU.PW.RPW)
+     /\ D2' := UserMaskD2(PIDU'.IDD'.RPW.IDU)
+
+  3. State = 2 /\ Rcv(start) =|>
+     State' := 3
+     /\ N1'  := new()
+     /\ TID' := new()
+     /\ T1'  := new()
+     /\ K1'  := new()
+     /\ CT1' := {K1'}_PKG
+     /\ M1'  := Mask1(PIDU.IDD.K1'.TID'.T1')
+     /\ M2'  := Mask2(N1'.K1'.XI.T1')
+     /\ V1'  := H(PIDU.TID'.XI.K1'.N1'.T1')
+     /\ witness(U,G,user_gss_n1,N1')
+     /\ secret(K1',sec_k1,{U,G})
+     /\ secret(N1',sec_n1,{U,G,D})
+     /\ Snd(CT1'.M1'.M2'.V1'.TID'.T1')
+
+  4. State = 3
+     /\ Rcv(Mask5(N2'.N3'.N1.K1.PIDU.XI).
+            H(IDD.PIDU.H(PIDU.IDD.N1.N2'.N3')).
+            H(N1.N2'.K1.PIDU.T4').T3'.T4') =|>
+     State' := 4
+     /\ M5' := Mask5(N2'.N3'.N1.K1.PIDU.XI)
+     /\ V5' := H(N1.N2'.K1.PIDU.T4')
+     /\ SK' := H(PIDU.IDD.N1.N2'.N3')
+     /\ V4' := H(IDD.PIDU.SK')
+     /\ request(U,G,gss_user_n2,N2')
+     /\ request(U,D,drone_user_sk,SK')
+     /\ secret(SK',sec_sk,{U,G,D})
+
+end role
+
+role ground_station(
+    U, G, D                         : agent,
+    KUG, KDG                        : symmetric_key,
+    PKG                             : public_key,
+    IDD                             : message,
+    H, PUF, Mask1, Mask2,
+    Mask3, Mask4, Mask5,
+    UserMaskB, DroneMaskG           : hash_func,
+    Snd, Rcv                        : channel(dy))
+played_by G
+def=
+
+  local
+    State                           : nat,
+    IDU, RPW, PIDU, XI              : message,
+    BI, CI                          : message,
+    RNJ, CJ, RJ                     : message,
+    PIDD, GJ                        : message,
+    N1, N2, N3                      : message,
+    TID, T1, T2, T3, T4             : message,
+    K1, CT1                         : message,
+    M1, M2, M3, M4, M5              : message,
+    V1, V2, V3, V4, V5              : message
+
+  init
+    State := 0
+
+  transition
+
+  1. State = 0
+     /\ Rcv({IDD.RNJ'.CJ'}_KDG) =|>
+     State' := 1
+     /\ RJ'   := PUF(CJ')
+     /\ PIDD' := H(IDD.inv(PKG))
+     /\ GJ'   := DroneMaskG(PIDD'.IDD.RNJ')
+     /\ secret(RJ',sec_rj,{G,D})
+     /\ Snd({GJ'}_KDG)
+
+  2. State = 1
+     /\ Rcv({IDU'.RPW'}_KUG) =|>
+     State' := 2
+     /\ PIDU' := H(IDU'.inv(PKG).RPW')
+     /\ XI'   := H(PIDU'.inv(PKG))
+     /\ BI'   := UserMaskB(XI'.RPW')
+     /\ CI'   := H(IDU'.RPW'.XI')
+     /\ secret(XI',sec_xi,{U,G})
+     /\ Snd({PIDU'.IDD.BI'.CI'}_KUG)
+
+  3. State = 2
+     /\ Rcv({K1'}_PKG.
+            Mask1(PIDU.IDD.K1'.TID'.T1').
+            Mask2(N1'.K1'.XI.T1').
+            H(PIDU.TID'.XI.K1'.N1'.T1').TID'.T1') =|>
+     State' := 3
+     /\ T2'  := new()
+     /\ N2'  := new()
+     /\ CT1' := {K1'}_PKG
+     /\ M1'  := Mask1(PIDU.IDD.K1'.TID'.T1')
+     /\ M2'  := Mask2(N1'.K1'.XI.T1')
+     /\ V1'  := H(PIDU.TID'.XI.K1'.N1'.T1')
+     /\ M3'  := Mask3(PIDU.N1'.N2'.CJ.IDD.PIDD.RJ.T2')
+     /\ V2'  := H(IDD.N2'.RJ.T2')
+     /\ request(G,U,user_gss_n1,N1')
+     /\ witness(G,D,gss_drone_n2,N2')
+     /\ witness(G,U,gss_user_n2,N2')
+     /\ secret(N2',sec_n2,{U,G,D})
+     /\ Snd(M3'.V2'.T2')
+
+  4. State = 3
+     /\ Rcv(Mask4(N3'.RJ.PIDD.T3').
+            H(PIDD.IDD.RJ.N2.N3').
+            V4'.T3') =|>
+     State' := 4
+     /\ T4' := new()
+     /\ M4' := Mask4(N3'.RJ.PIDD.T3')
+     /\ V3' := H(PIDD.IDD.RJ.N2.N3')
+     /\ M5' := Mask5(N2.N3'.N1.K1.PIDU.XI)
+     /\ V5' := H(N1.N2.K1.PIDU.T4')
+     /\ request(G,D,drone_gss_n3,N3')
+     /\ Snd(M5'.V4'.V5'.T3'.T4')
+
+end role
+
+role drone(
+    U, G, D                         : agent,
+    KDG                             : symmetric_key,
+    IDD, DKJ                        : message,
+    H, PUF, Mask3, Mask4,
+    DroneMaskF, DroneMaskG          : hash_func,
+    Snd, Rcv                        : channel(dy))
+played_by D
+def=
+
+  local
+    State                           : nat,
+    RNJ, CJ, RJ                     : message,
+    PIDD, FJ, GJ                    : message,
+    PIDU, N1, N2, N3                : message,
+    T2, T3                          : message,
+    M3, M4                          : message,
+    V2, V3, V4, SK                  : message
+
+  init
+    State := 0
+
+  transition
+
+  1. State = 0 /\ Rcv(start) =|>
+     State' := 1
+     /\ RNJ' := new()
+     /\ CJ'  := new()
+     /\ Snd({IDD.RNJ'.CJ'}_KDG)
+
+  2. State = 1
+     /\ Rcv({DroneMaskG(PIDD'.IDD.RNJ)}_KDG) =|>
+     State' := 2
+     /\ GJ' := DroneMaskG(PIDD'.IDD.RNJ)
+     /\ FJ' := DroneMaskF(RNJ.CJ.IDD.DKJ)
+
+  3. State = 2
+     /\ Rcv(Mask3(PIDU'.N1'.N2'.CJ.IDD.PIDD.PUF(CJ).T2').
+            H(IDD.N2'.PUF(CJ).T2').T2') =|>
+     State' := 3
+     /\ RJ' := PUF(CJ)
+     /\ T3' := new()
+     /\ N3' := new()
+     /\ M3' := Mask3(PIDU'.N1'.N2'.CJ.IDD.PIDD.RJ'.T2')
+     /\ V2' := H(IDD.N2'.RJ'.T2')
+     /\ M4' := Mask4(N3'.RJ'.PIDD.T3')
+     /\ SK' := H(PIDU'.IDD.N1'.N2'.N3')
+     /\ V3' := H(PIDD.IDD.RJ'.N2'.N3')
+     /\ V4' := H(IDD.PIDU'.SK')
+     /\ request(D,G,gss_drone_n2,N2')
+     /\ witness(D,G,drone_gss_n3,N3')
+     /\ witness(D,U,drone_user_sk,SK')
+     /\ secret(N3',sec_n3,{U,G,D})
+     /\ secret(SK',sec_sk,{U,G,D})
+     /\ Snd(M4'.V3'.V4'.T3')
+
+end role
+
+role session(
+    U, G, D                         : agent,
+    KUG, KDG                        : symmetric_key,
+    PKG                             : public_key,
+    IDU, PW                         : message,
+    IDD, DKJ                        : message,
+    H, PUF, Mask1, Mask2,
+    Mask3, Mask4, Mask5,
+    UserMaskB, UserMaskD1,
+    UserMaskD2, DroneMaskF,
+    DroneMaskG                      : hash_func)
+def=
+
+  local
+    SU, RU, SG, RG, SD, RD          : channel(dy)
+
+  composition
+    mobile_user(U,G,D,KUG,PKG,IDU,PW,
+                H,Mask1,Mask2,Mask5,
+                UserMaskB,UserMaskD1,UserMaskD2,SU,RU)
+    /\ ground_station(U,G,D,KUG,KDG,PKG,IDD,
+                      H,PUF,Mask1,Mask2,Mask3,Mask4,Mask5,
+                      UserMaskB,DroneMaskG,SG,RG)
+    /\ drone(U,G,D,KDG,IDD,DKJ,
+             H,PUF,Mask3,Mask4,DroneMaskF,DroneMaskG,SD,RD)
+
+end role
+
+role environment()
+def=
+
+  const
+    u, gss, d                       : agent,
+    kug, kdg                        : symmetric_key,
+    pkgss                           : public_key,
+    idu, pw                         : message,
+    idd, dkj                        : message,
+    h, puf, mask1, mask2,
+    mask3, mask4, mask5,
+    umaskb, umaskd1, umaskd2,
+    dmaskf, dmaskg                  : hash_func,
+    user_gss_n1, gss_user_n2,
+    gss_drone_n2, drone_gss_n3,
+    drone_user_sk,
+    sec_k1, sec_sk, sec_xi, sec_rj,
+    sec_n1, sec_n2, sec_n3          : protocol_id
+
+  intruder_knowledge = {u,gss,d,pkgss,h,
+                        mask1,mask2,mask3,mask4,mask5,
+                        umaskb,umaskd1,umaskd2,dmaskf,dmaskg}
+
+  composition
+    session(u,gss,d,kug,kdg,pkgss,
+            idu,pw,idd,dkj,
+            h,puf,mask1,mask2,mask3,mask4,mask5,
+            umaskb,umaskd1,umaskd2,dmaskf,dmaskg)
+
+end role
+
+goal
+  secrecy_of sec_k1
+  secrecy_of sec_sk
+  secrecy_of sec_xi
+  secrecy_of sec_rj
+  secrecy_of sec_n1
+  secrecy_of sec_n2
+  secrecy_of sec_n3
+
+  authentication_on user_gss_n1
+  authentication_on gss_user_n2
+  authentication_on gss_drone_n2
+  authentication_on drone_gss_n3
+  authentication_on drone_user_sk
+end goal
+
+environment()
