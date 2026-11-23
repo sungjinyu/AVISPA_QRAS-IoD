@@ -1,1 +1,21 @@
-asd
+SUMMARY
+  SAFE
+
+DETAILS
+  BOUNDED_NUMBER_OF_SESSIONS
+ TYPED_MODEL 
+PROTOCOL
+  /home/span/span/test_suite/results/QRAS-IoD.if
+
+GOAL
+  As_specified
+
+BACK_END
+  OFMC
+
+STATISTICS
+
+  ParseTime: 0.01 s
+  SearchTime: 0.08 s
+  VisitedNodes: 127 nodes
+  Depth: 11 plies
