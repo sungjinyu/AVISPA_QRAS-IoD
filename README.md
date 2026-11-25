@@ -20,9 +20,8 @@ The AVISPA model checks whether a Dolev–Yao intruder who fully controls the pu
 5. [HLPSL Model](#hlpsl-model)
 6. [Security Goals](#security-goals)
 7. [Results](#results)
-8. [Scope and Limitations](#scope-and-limitations)
-9. [Citation](#citation)
-10. [References](#references)
+8. [Citation](#citation)
+9. [References](#references)
 
 ---
 
